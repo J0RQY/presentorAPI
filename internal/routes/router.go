@@ -1,17 +1,16 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	controller "github.com/j0rqy/presentorAPI/internal/controllers"
+)
 
 func Routes(router *gin.Engine) {
 	api := router.Group("/api")
 	{
 		v1 := api.Group("/v1")
 		{
-			v1.GET("/health", func(c *gin.Context) {
-				c.JSON(200, gin.H{
-					"status": "ok",
-				})
-			})
+			v1.GET("/health", controller.Health)
 		}
 	}
 }
