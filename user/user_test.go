@@ -8,16 +8,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/j0rqy/presentorAPI/user_store"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type MockUserStore struct {
-	CreateUserFunc func(ctx context.Context, user *user_store.UserFull) error
-	CapturedUser   chan *user_store.UserFull
+	CreateUserFunc func(ctx context.Context, user *UserFull) error
+	CapturedUser   chan *UserFull
 }
 
-func (m *MockUserStore) CreateUser(ctx context.Context, user *user_store.UserFull) error {
+func (m *MockUserStore) CreateUser(ctx context.Context, user *UserFull) error {
 	select {
 	case m.CapturedUser <- user:
 	default:
@@ -39,10 +38,10 @@ func TestService_CreateUser_Success(t *testing.T) {
 	)
 
 	mockStore := &MockUserStore{
-		CreateUserFunc: func(ctx context.Context, user *user_store.UserFull) error { return nil },
-		CapturedUser:   make(chan *user_store.UserFull, 1),
+		CreateUserFunc: func(ctx context.Context, user *UserFull) error { return nil },
+		CapturedUser:   make(chan *UserFull, 1),
 	}
-	svc := NewService(mockStore)
+	svc := NewUserService(mockStore)
 
 	// Act
 	gotUUID, err := svc.CreateUser(testEmail, testPassword)
@@ -86,10 +85,10 @@ func TestService_CreateUser_StoreFailure(t *testing.T) {
 	testError := errors.New("database connection failure")
 
 	mockStore := &MockUserStore{
-		CreateUserFunc: func(ctx context.Context, user *user_store.UserFull) error { return testError },
-		CapturedUser:   make(chan *user_store.UserFull, 1),
+		CreateUserFunc: func(ctx context.Context, user *UserFull) error { return testError },
+		CapturedUser:   make(chan *UserFull, 1),
 	}
-	svc := NewService(mockStore)
+	svc := NewUserService(mockStore)
 
 	// Act
 	gotUUID, err := svc.CreateUser("error.user@example.com", "Password123")

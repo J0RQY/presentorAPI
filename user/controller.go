@@ -9,15 +9,15 @@ import (
 	"github.com/j0rqy/presentorAPI/web/validation"
 )
 
-type Handler struct {
-	service *Service
+type UserController struct {
+	service *UserService
 }
 
-func NewHandler(service *Service) *Handler {
-	return &Handler{service: service}
+func NewUserController(service *UserService) *UserController {
+	return &UserController{service: service}
 }
 
-func (h *Handler) CreateUserEndPoint(c *gin.Context) {
+func (h *UserController) CreateUserHandler(c *gin.Context) {
 	var user UserCreateRequestDTO
 
 	if err := c.ShouldBindJSON(&user); err != nil {

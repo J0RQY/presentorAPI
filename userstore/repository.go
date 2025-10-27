@@ -1,10 +1,11 @@
-package user_store
+package userstore
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/j0rqy/presentorAPI/database"
+	"github.com/j0rqy/presentorAPI/user"
 )
 
 type PostgresStore struct{}
@@ -13,7 +14,7 @@ func NewPostgresStore() *PostgresStore {
 	return &PostgresStore{}
 }
 
-func (s *PostgresStore) CreateUser(ctx context.Context, user *UserFull) error {
+func (s *PostgresStore) CreateUser(ctx context.Context, user *user.UserFull) error {
 	db := database.GetDB()
 
 	query := `

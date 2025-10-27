@@ -5,23 +5,22 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/j0rqy/presentorAPI/user_store"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserStore interface {
-	CreateUser(ctx context.Context, user *user_store.UserFull) error
+	CreateUser(ctx context.Context, user *UserFull) error
 }
 
-type Service struct {
+type UserService struct {
 	store UserStore
 }
 
-func NewService(store UserStore) *Service {
-	return &Service{store: store}
+func NewUserService(store UserStore) *UserService {
+	return &UserService{store: store}
 }
 
-func (s *Service) CreateUser(email string, password string) (string, error) {
+func (s *UserService) CreateUser(email string, password string) (string, error) {
 
 	hashedPassword, err := hashPassword(password)
 	if err != nil {
@@ -32,7 +31,7 @@ func (s *Service) CreateUser(email string, password string) (string, error) {
 
 	userUUID := uuid.New()
 
-	user := &user_store.UserFull{
+	user := &UserFull{
 		UUID:            userUUID,
 		Email:           email,
 		EmailVerified:   false,

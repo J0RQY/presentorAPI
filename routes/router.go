@@ -4,22 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/j0rqy/presentorAPI/health"
 	"github.com/j0rqy/presentorAPI/user"
-	"github.com/j0rqy/presentorAPI/user_store"
+	"github.com/j0rqy/presentorAPI/userstore"
 )
 
 func Routes(router *gin.Engine) {
-	userStore := user_store.NewPostgresStore()
-	userService := user.NewService(userStore)
-	userHandler := user.NewHandler(userService)
+	userStore := userstore.NewPostgresStore()
+	userService := user.NewUserService(userStore)
+	userHandler := user.NewUserController(userService)
 
 	api := router.Group("/api")
 	{
 		v1 := api.Group("/v1")
 		{
-			v1.GET("/health", health.Health)
+			v1.GET("/health", health.GetHealthHandler)
 			userRoute := v1.Group("/user")
 			{
-				userRoute.POST("", userHandler.CreateUserEndPoint)
+				userRoute.POST("", userHandler.CreateUserHandler)
 			}
 		}
 	}
