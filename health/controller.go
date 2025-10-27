@@ -1,8 +1,8 @@
-package controller
+package health
 
 import "github.com/gin-gonic/gin"
 
-func Health(c *gin.Context) {
+func GetHealthHandler(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status": "ok",
 	})
